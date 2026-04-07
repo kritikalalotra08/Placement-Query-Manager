@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AIT Pune · Placement Cell Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/dashboard.css">
+
+<style> </style>
+</head>
+<body>
+<!-- ══ DASHBOARD ══ -->
+<div class="screen" id="screen-dashboard">
+  <aside class="sidebar">
+    <div class="sb-head">
+      <div class="sb-ait">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="sb-ait-logo" width="34" height="34">
+          <rect width="80" height="80" rx="12" fill="rgba(255,255,255,0.12)"/>
+          <polygon points="40,10 46,27 64,27 50,38 55,56 40,45 25,56 30,38 16,27 34,27" fill="#c88b2f"/>
+          <text x="40" y="72" text-anchor="middle" font-family="Georgia,serif" font-size="10" font-weight="bold" fill="white">AIT</text>
+        </svg>
+        <div>
+          <div class="sb-ait-name">Army Institute of<br>Technology, Pune</div>
+          <div class="sb-ait-sub">T&amp;P Office</div>
+        </div>
+      </div>
+      <div class="sb-dept">Placement Cell</div>
+      <div class="sb-title">Query Manager</div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-av">?</div>
+      <div><div class="sb-uname" id="sb-nm">—</div><div class="sb-urole" id="sb-rl">—</div></div>
+    </div>
+    <nav class="sb-nav" id="sidebar-nav"></nav>
+    <div class="sb-foot"><button class="logout-btn" onclick="doLogout()">⇠ Logout</button></div>
+  </aside>
+
+  <div class="main">
+
+    <!-- ─── STUDENT PAGES ─── -->
+    <div class="page" id="page-s-home">
+      <div class="ph"><div><div class="ph-title">My Dashboard</div><div class="ph-sub" id="s-dsub">AIT Pune · Placement Cell</div></div></div>
+      <div class="stats-row">
+        <div class="sc an"><div class="sc-num" id="ss-total">0</div><div class="sc-lbl">Submitted</div></div>
+        <div class="sc aa"><div class="sc-num" id="ss-pend">0</div><div class="sc-lbl">Pending / Awaiting</div></div>
+        <div class="sc as"><div class="sc-num" id="ss-res">0</div><div class="sc-lbl">Resolved</div></div>
+        <div class="sc ac"><div class="sc-num" id="ss-crit">0</div><div class="sc-lbl">Critical</div></div>
+      </div>
+      <div class="card"><div class="ch">Recent Queries</div><div id="s-recent"></div></div>
+    </div>
+
+    <div class="page" id="page-s-submit">
+      <div class="ph"><div><div class="ph-title">Submit a Query</div><div class="ph-sub">Priority is auto-computed · Routed to correct tier</div></div></div>
+      <div class="card">
+        <!-- Drive type toggle -->
+        <div class="field">
+          <label>This query is about</label>
+          <div class="drive-toggle">
+            <div class="drive-opt intern">
+              <input type="radio" name="drive" id="dr-intern" value="internship" checked onchange="previewPrio()"/>
+              <label for="dr-intern"><span class="di">💼</span><span class="dl">Internship</span><span class="ds">6-month / summer internship</span></label>
+            </div>
+            <div class="drive-opt place">
+              <input type="radio" name="drive" id="dr-place" value="placement" onchange="previewPrio()"/>
+              <label for="dr-place"><span class="di">🏢</span><span class="dl">Placement</span><span class="ds">Full-time campus drive</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="field"><label>Company Name</label><input id="sq-co" placeholder="e.g. Infosys, Google, TCS"/></div>
+          <div class="field"><label>Query Type</label>
+            <select id="sq-type" onchange="previewPrio()">
+              <option value="form">Form Filling / Application Help</option>
+              <option value="venue">Venue / PPT Timing</option>
+              <option value="eligibility">Eligibility Check / FAQ</option>
+              <option value="dress_code">Dress Code</option>
+              <option value="resume_review">Resume Review</option>
+              <option value="shortlist">Shortlist Dispute</option>
+              <option value="interview_reschedule">Interview Reschedule</option>
+              <option value="document">Document Requirements</option>
+              <option value="offer_letter">Offer Letter Issue</option>
+              <option value="policy">Policy Exception</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Days to Deadline (0 = today)</label><input id="sq-days" type="number" value="7" min="0" max="365" oninput="previewPrio()"/></div>
+          <div class="field"><label>Minutes to Next Event (999 = N/A)</label><input id="sq-mins" type="number" value="999" min="0" max="999" oninput="previewPrio()"/></div>
+          <div class="field span2"><label>Description</label><textarea id="sq-desc" placeholder="Describe your issue clearly..."></textarea></div>
+        </div>
+        <div class="prio-banner">
+          <span style="color:var(--text3)">Auto-priority:</span>
+          <span id="prio-pill">—</span>
+          <span style="margin-left:auto;font-size:.7rem;color:var(--text3)" id="prio-tier">—</span>
+        </div>
+        <div class="btn-row"><button class="btn btn-coral" onclick="doSubmitQuery()">Submit Query →</button></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-s-history">
+      <div class="ph"><div><div class="ph-title">Query History</div><div class="ph-sub" id="s-hsub">All your queries</div></div></div>
+      <div class="card" style="padding:0;overflow:hidden"><div id="s-hist-tbl"><div class="empty" style="padding:48px"><div class="empty-ico">📂</div><div class="empty-txt">No queries yet.</div></div></div></div>
+    </div>
+
+    <!-- ─── COORDINATOR PAGES ─── -->
+    <div class="page" id="page-c-home">
+      <div class="ph">
+        <div><div class="ph-title">Coordinator Dashboard</div><div class="ph-sub" id="c-dsub">AIT Pune · Training &amp; Placement Office</div></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline btn-sm" onclick="processNext()">▶ Next</button>
+          <button class="btn btn-coral btn-sm" onclick="processAll()">▶▶ Process All</button>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="sc an"><div class="sc-num" id="cs-total">0</div><div class="sc-lbl">Total Queries</div></div>
+        <div class="sc ac"><div class="sc-num" id="cs-queue">0</div><div class="sc-lbl">In Queue</div></div>
+        <div class="sc ai"><div class="sc-num" id="cs-intern">0</div><div class="sc-lbl">Internship</div></div>
+        <div class="sc ap"><div class="sc-num" id="cs-place">0</div><div class="sc-lbl">Placement</div></div>
+      </div>
+      <div class="card">
+        <div class="ch">Tier Resolution Flow</div>
+        <div class="tier-flow">
+          <div class="tf-seg"><div class="tf-lbl">Tier 1 · PR</div><div class="tf-name">Ananya Sharma</div><div class="tf-types">Form · Venue · Eligibility<br>Dress Code · FAQ</div><div class="tf-cnt" id="tf1">0 resolved</div></div>
+          <div class="tf-seg"><div class="tf-lbl">Tier 2 · Coordinator</div><div class="tf-name">Prof. Rakesh Mehta</div><div class="tf-types">Resume · Shortlist<br>Interview · Documents</div><div class="tf-cnt" id="tf2">0 resolved</div></div>
+          <div class="tf-seg"><div class="tf-lbl">Tier 3 · Officer</div><div class="tf-name">Dr. Priya Nair</div><div class="tf-types">Offer Letter · Policy<br>All Escalations</div><div class="tf-cnt" id="tf3">0 resolved</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPLIT QUEUE PAGE -->
+    <div class="page" id="page-c-queue">
+      <div class="ph">
+        <div><div class="ph-title">Query Queue</div><div class="ph-sub">Split by drive type · Critical first</div></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline btn-sm" onclick="processNext()">▶ Next</button>
+          <button class="btn btn-coral btn-sm" onclick="processAll()">▶▶ All</button>
+        </div>
+      </div>
+      <div class="split-queue">
+        <div class="split-box">
+          <div class="split-box-head">
+            <div class="split-box-title intern">💼 Internship Queries</div>
+            <span class="dtag-intern" id="sq-intern-count">0</span>
+          </div>
+          <div class="split-box-body" id="sq-intern-list"><div class="empty"><div class="empty-ico">💼</div><div class="empty-txt">No internship queries.</div></div></div>
+        </div>
+        <div class="split-box">
+          <div class="split-box-head">
+            <div class="split-box-title place">🏢 Placement Queries</div>
+            <span class="dtag-placement" id="sq-place-count">0</span>
+          </div>
+          <div class="split-box-body" id="sq-place-list"><div class="empty"><div class="empty-ico">🏢</div><div class="empty-txt">No placement queries.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-c-resolved">
+      <div class="ph"><div><div class="ph-title">Resolved Queries</div><div class="ph-sub" id="c-rsub">Resolved log</div></div></div>
+      <div class="card" style="padding:0;overflow:hidden"><div id="c-res-tbl"><div class="empty" style="padding:48px"><div class="empty-ico">✅</div><div class="empty-txt">No resolved queries yet.</div></div></div></div>
+    </div>
+
+    <div class="page" id="page-c-students">
+      <div class="ph"><div><div class="ph-title">Students</div><div class="ph-sub" id="c-ssub">Registered students</div></div></div>
+      <div class="card" style="padding:0;overflow:hidden"><div id="c-stud-tbl"><div class="empty" style="padding:48px"><div class="empty-ico">👥</div><div class="empty-txt">No students registered.</div></div></div></div>
+    </div>
+
+    <div class="page" id="page-c-briefing">
+      <div class="ph"><div><div class="ph-title">PR Briefing Notes</div><div class="ph-sub">Company-specific notes for the PR</div></div></div>
+      <div class="card">
+        <div class="ch">Add Note</div>
+        <div class="fg2">
+          <div class="field"><label>Company Name</label><input id="bn-co" placeholder="e.g. Google, Wipro"/></div>
+          <div class="field"><label>Query Type</label>
+            <select id="bn-tp"><option value="form">Form</option><option value="venue">Venue</option><option value="eligibility">Eligibility</option><option value="dress_code">Dress Code</option><option value="faq">FAQ</option></select>
+          </div>
+          <div class="field span2"><label>Note</label><textarea id="bn-note" placeholder="e.g. Google PPT is in Hall A, Block 3. Arrive by 9:45 AM."></textarea></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-navy" onclick="addNote()">Save Note</button></div>
+      </div>
+      <div class="card"><div class="ch">Saved Notes</div><div id="bn-list"><div class="empty"><div class="empty-ico">📌</div><div class="empty-txt">No notes added yet.</div></div></div></div>
+    </div>
+
+    <div class="page" id="page-c-analytics">
+      <div class="ph"><div><div class="ph-title">Analytics</div><div class="ph-sub">AIT Placement Cell · System statistics</div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div class="card"><div class="ch">Resolution by Tier</div><div id="an-tiers"><div style="color:var(--text3);font-size:.82rem">No data yet.</div></div></div>
+        <div class="card"><div class="ch">Priority Breakdown</div><div id="an-prio"><div style="color:var(--text3);font-size:.82rem">No data yet.</div></div></div>
+        <div class="card"><div class="ch">Drive Type Split</div><div id="an-drive"><div style="color:var(--text3);font-size:.82rem">No data yet.</div></div></div>
+        <div class="card"><div class="ch">Top Query Types</div><div id="an-types"><div style="color:var(--text3);font-size:.82rem">No data yet.</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FEEDBACK/RESOLVE MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">Query Detail</div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script src="./js/storage.js"></script>
+<script src="./js/dashboard.js"></script>
+</body>
+</html>

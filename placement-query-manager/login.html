@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AIT Pune · Placement Cell Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/auth.css">
+</head>
+<body>
+
+<!-- VIEW 1: LANDING -->
+<div class="view active" id="v-landing">
+  <div class="ait-header">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="64" height="64" style="flex-shrink:0">
+      <rect width="80" height="80" rx="12" fill="#1b2a4a"/>
+      <polygon points="40,10 46,27 64,27 50,38 55,56 40,45 25,56 30,38 16,27 34,27" fill="#c88b2f"/>
+      <text x="40" y="72" text-anchor="middle" font-family="Georgia,serif" font-size="10" font-weight="bold" fill="white">AIT</text>
+    </svg>
+    <div class="ait-text-block">
+      <div class="ait-college">Army Institute of Technology</div>
+      <div class="ait-tagline">Dighi Hills, Pune · Affiliated to Savitribai Phule Pune University</div>
+    </div>
+  </div>
+  <div class="land-divider"></div>
+  <div class="land-title">Placement Cell<br>Query Manager</div>
+  <p class="land-sub">3-Tier Resolution System · Training &amp; Placement Office</p>
+  <div class="role-grid">
+    <div class="role-card rc-s" onclick="pickRole('student')">
+      <div class="role-ico">🎒</div>
+      <div class="role-name">Student</div>
+      <p class="role-desc">Login or register to submit placement &amp; internship queries and track resolution.</p>
+    </div>
+    <div class="role-card rc-c" onclick="pickRole('coordinator')">
+      <div class="role-ico">🏛️</div>
+      <div class="role-name">Coordinator</div>
+      <p class="role-desc">Login to view, give feedback, and resolve queries assigned to your tier.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW 2: AUTH -->
+<div class="view" id="v-auth">
+  <div class="auth-box">
+    <div class="auth-ait-bar">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="38" height="38" style="flex-shrink:0">
+        <rect width="80" height="80" rx="12" fill="#1b2a4a"/>
+        <polygon points="40,10 46,27 64,27 50,38 55,56 40,45 25,56 30,38 16,27 34,27" fill="#c88b2f"/>
+        <text x="40" y="72" text-anchor="middle" font-family="Georgia,serif" font-size="10" font-weight="bold" fill="white">AIT</text>
+      </svg>
+      <div>
+        <div class="auth-ait-name">Army Institute of Technology, Pune</div>
+        <div class="auth-ait-sub">Training &amp; Placement Office</div>
+      </div>
+    </div>
+
+    <button class="auth-back" onclick="showView('v-landing')">← Back to home</button>
+    <div class="auth-title" id="auth-title">Student Portal</div>
+    <div class="auth-sub" id="auth-sub">Login with your name &amp; mobile number</div>
+
+    <div class="tab-row" id="auth-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="tab-btn" id="tab-reg" onclick="switchTab('reg')">Register</button>
+    </div>
+
+    <!-- COORDINATOR HINT -->
+    <div id="coord-hint" style="display:none">
+      <div class="coord-hint">
+        <div class="coord-hint-title">🔑 Click any account to auto-fill</div>
+        <div class="cred-card" onclick="fillCred('Ananya Sharma','9000000001')">
+          <div class="cred-av" style="background:#1b2a4a">A</div>
+          <div class="cred-info"><div class="cred-name">Ananya Sharma</div><div class="cred-role">Placement Rep. · Tier 1</div><div class="cred-hint">Form · Venue · Eligibility · FAQ</div></div>
+          <div class="cred-mob">9000000001</div>
+        </div>
+        <div class="cred-card" onclick="fillCred('Prof. Rakesh Mehta','9000000002')">
+          <div class="cred-av" style="background:#c88b2f">R</div>
+          <div class="cred-info"><div class="cred-name">Prof. Rakesh Mehta</div><div class="cred-role">Coordinator · Tier 2</div><div class="cred-hint">Resume · Shortlist · Documents</div></div>
+          <div class="cred-mob">9000000002</div>
+        </div>
+        <div class="cred-card" onclick="fillCred('Dr. Priya Nair','9000000003')">
+          <div class="cred-av" style="background:#d95f3b">P</div>
+          <div class="cred-info"><div class="cred-name">Dr. Priya Nair</div><div class="cred-role">Placement Officer · Tier 3</div><div class="cred-hint">Offer Letter · Policy · Escalations</div></div>
+          <div class="cred-mob">9000000003</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <div class="field"><label>Full Name</label><input id="ln-name" placeholder="Your registered name"/></div>
+      <div class="field"><label>Mobile Number</label><input id="ln-mob" placeholder="10-digit mobile"/></div>
+      <button class="btn btn-navy" onclick="doLogin()">Login →</button>
+    </div>
+
+    <!-- REGISTER FORM (student only) -->
+    <div id="form-reg" style="display:none">
+      <div class="fg2">
+        <div class="field"><label>Full Name</label><input id="rn" placeholder="e.g. Kritika Sharma"/></div>
+        <div class="field"><label>Mobile Number</label><input id="rm" placeholder="10-digit mobile"/></div>
+        <div class="field"><label>Branch</label>
+          <select id="rb">
+            <option value="CS">Computer Science</option>
+            <option value="IT">Information Technology</option>
+            <option value="ECE">Electronics &amp; Comm.</option>
+            <option value="Mech">Mechanical</option>
+            <option value="Civil">Civil</option>
+            <option value="EE">Electrical</option>
+          </select>
+        </div>
+        <div class="field"><label>Year</label>
+          <select id="ry">
+            <option value="1">1st Year</option><option value="2">2nd Year</option>
+            <option value="3" selected>3rd Year</option><option value="4">4th Year</option>
+          </select>
+        </div>
+        <div class="field span2"><label>CGPA (0–10)</label><input id="rc" type="number" min="0" max="10" step="0.01" placeholder="e.g. 8.5"/></div>
+      </div>
+      <button class="btn btn-coral" onclick="doRegister()">Register &amp; Continue →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="./js/storage.js"></script>
+<script src="./js/auth.js"></script>
+</body>
+</html>
